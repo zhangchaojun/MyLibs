@@ -1,0 +1,36 @@
+android {
+    compileSdkVersion versions.compileSdk
+//    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/notice.txt'
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+task copyAAR(type: Copy) {
+    from 'build/outputs/aar'
+    into "../../libs"
+    include(project.name + '-release.aar')
+    rename(project.name + '-release.aar', project.name + ".aar")
+}
+
+assemble.finalizedBy copyAAR
